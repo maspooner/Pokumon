@@ -1,4 +1,3 @@
-import java.io.File;
 
 import javax.sound.sampled.*;
 
@@ -10,7 +9,7 @@ public class AudioPlayer{
 	
 	private static String getFile(int musicID){
 		//TODO: change to get resource after
-		String newName="C:/pokemon/music/";
+		String newName="/music/";
 		switch(musicID){
 		case 1: newName+="title"; break;
 		case 2: newName+="battle"; break;
@@ -33,7 +32,7 @@ public class AudioPlayer{
 
 	private static String getSFile(int soundID){
 		//TODO: change to get resource after
-		String newName="C:/pokemon/sounds/";
+		String newName="/sounds/";
 		switch(soundID){
 		case 1: newName+="hit"; break;
 		case 2: newName+="getPoke"; break;
@@ -58,8 +57,7 @@ public class AudioPlayer{
 			      int BUFFER_SIZE = 64*1024;  // 64 KB
 			   
 			      try {
-			         File soundFile = new File(getFile(musicID));
-			         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+			         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(getFile(musicID)));
 			         AudioFormat audioFormat = audioInputStream.getFormat();
 			         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
 			         soundLine = (SourceDataLine) AudioSystem.getLine(info);
@@ -90,8 +88,7 @@ public class AudioPlayer{
 		new Thread(new Runnable(){
 			public void run() {
 				try{
-					File file=new File(getSFile(soundID));
-					AudioInputStream ais=AudioSystem.getAudioInputStream(file);
+					AudioInputStream ais=AudioSystem.getAudioInputStream(getClass().getResource(getSFile(soundID)));
 					Clip cl=AudioSystem.getClip();
 					cl.open(ais);
 					cl.start();

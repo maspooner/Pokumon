@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -258,7 +257,7 @@ public class GUI implements ActionListener {
 		picture.setActionCommand("picture");
 		Image i = null;
 		try {
-			i=ImageIO.read(new File("C:/pokemon/images/titlepicture.png"));
+			i=ImageIO.read(getClass().getResource("/images/titlepicture.png"));
 			i=i.getScaledInstance(1020, 600, 0);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -291,7 +290,7 @@ public class GUI implements ActionListener {
 	private static Image getImage(String fileName){
 		Image i= null;
 		try {
-			i=ImageIO.read(new File("C:/pokemon/images/"+fileName+".png"));
+			i=ImageIO.read(GUI.class.getResource("/images/"+fileName+".png"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
