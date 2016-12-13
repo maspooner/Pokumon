@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -62,7 +63,7 @@ public class GUI implements ActionListener {
 		frame.setResizable(false);
 		frame.setSize(FRAME_SIZE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setIconImage(getImage("pikachu"));
+		frame.setIconImage(loadImage("pikachu"));
 		
 		setupJMenuBar();
 		setupFrameContents();
@@ -72,7 +73,7 @@ public class GUI implements ActionListener {
 		poke.setSize(new Dimension(900,900));
 		poke.setResizable(false);
 		poke.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		poke.setIconImage(getImage("pikachu"));
+		poke.setIconImage(loadImage("pikachu"));
 		loadPoke();
 	}
 	private void openItemFrame() {
@@ -80,7 +81,7 @@ public class GUI implements ActionListener {
 		itemDialog.setSize(new Dimension(300,200));
 		itemDialog.setResizable(false);
 		itemDialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		itemDialog.setIconImage(getImage("pikachu"));
+		itemDialog.setIconImage(loadImage("pikachu"));
 
 		JTextArea text=new JTextArea();
 		text.setFont(new Font("sans serif", Font.BOLD, 22));
@@ -255,13 +256,8 @@ public class GUI implements ActionListener {
 		JButton picture=new JButton();
 		picture.addActionListener(this);
 		picture.setActionCommand("picture");
-		Image i = null;
-		try {
-			i=ImageIO.read(getClass().getResource("/images/titlepicture.png"));
-			i=i.getScaledInstance(1020, 600, 0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Image i = loadImage("titlepicture");
+		i = i.getScaledInstance(1020, 600, 0);
 		picture.setIcon(new ImageIcon(i));
 		frame.getContentPane().add(picture);
 		frame.getContentPane().add(topBottom);
@@ -269,7 +265,22 @@ public class GUI implements ActionListener {
 		setFontSizes();
 		setDefaults();
 	}
-
+	
+	private static Image loadImage(String fileName){
+		String path = "images/" + fileName + ".png";
+		try {
+			if(Main.IS_TEST){
+				return ImageIO.read(new File(path));
+			}
+			else{
+				return ImageIO.read(GUI.class.getResource("/" + path));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	private void setFontSizes() {
 		Font standard=new Font("sans serif", Font.BOLD, 22);
 		Font consoleF=new Font("sans serif", Font.BOLD, 28);
@@ -285,16 +296,6 @@ public class GUI implements ActionListener {
 		upperRight.setFont(standard);
 		lowerLeft.setFont(standard);
 		lowerRight.setFont(standard);
-	}
-	
-	private static Image getImage(String fileName){
-		Image i= null;
-		try {
-			i=ImageIO.read(GUI.class.getResource("/images/"+fileName+".png"));
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return i;
 	}
 	
 	private void setDefaults(){
@@ -313,7 +314,7 @@ public class GUI implements ActionListener {
 	}
 	
 	public static ImageIcon getImageIcon(String fileName){
-		Image i=getImage(fileName).getScaledInstance(300, 300, 0);
+		Image i = loadImage(fileName).getScaledInstance(300, 300, 0);
 		return new ImageIcon(i);
 	}
 	

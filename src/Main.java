@@ -2,6 +2,8 @@ import java.util.Random;
 
 
 public class Main {
+	protected static final boolean IS_TEST = true;
+	
 	public static String playerName="Matt";
 	public static boolean male=false;
 	public static int money=100;
@@ -22,6 +24,8 @@ public class Main {
 	public static volatile boolean chosePotion=false;
 	public static volatile boolean choseBack=false;
 	public static boolean menusEnabled=false;
+	
+	
 	
 	 public static void main(String[] args) {
 		 new GUI();

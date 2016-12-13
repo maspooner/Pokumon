@@ -1,4 +1,7 @@
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.sound.sampled.*;
 
 
@@ -8,8 +11,7 @@ public class AudioPlayer{
 	static boolean isPlaying=false;
 	
 	private static String getFile(int musicID){
-		//TODO: change to get resource after
-		String newName="/music/";
+		String newName="music/";
 		switch(musicID){
 		case 1: newName+="title"; break;
 		case 2: newName+="battle"; break;
@@ -32,7 +34,7 @@ public class AudioPlayer{
 
 	private static String getSFile(int soundID){
 		//TODO: change to get resource after
-		String newName="/sounds/";
+		String newName="sounds/";
 		switch(soundID){
 		case 1: newName+="hit"; break;
 		case 2: newName+="getPoke"; break;
@@ -45,6 +47,13 @@ public class AudioPlayer{
 		return newName+=".wav";
 	}
 	
+	private static AudioInputStream createInputStream(String path) throws UnsupportedAudioFileException, IOException{
+		if(Main.IS_TEST){
+       	 return AudioSystem.getAudioInputStream(new File(path));
+        }
+       	return AudioSystem.getAudioInputStream(AudioPlayer.class.getResource("/" + path));
+	}
+	
 	@SuppressWarnings("deprecation")
 	public static void playm(final int musicID) {
 		if(thread.isAlive())
@@ -55,9 +64,9 @@ public class AudioPlayer{
 				 isPlaying=true;
 				 SourceDataLine soundLine = null;
 			      int BUFFER_SIZE = 64*1024;  // 64 KB
-			   
+			      
 			      try {
-			         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(getFile(musicID)));
+			         AudioInputStream audioInputStream = createInputStream(getFile(musicID));
 			         AudioFormat audioFormat = audioInputStream.getFormat();
 			         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
 			         soundLine = (SourceDataLine) AudioSystem.getLine(info);
@@ -88,7 +97,7 @@ public class AudioPlayer{
 		new Thread(new Runnable(){
 			public void run() {
 				try{
-					AudioInputStream ais=AudioSystem.getAudioInputStream(getClass().getResource(getSFile(soundID)));
+					AudioInputStream ais = createInputStream(getSFile(soundID));
 					Clip cl=AudioSystem.getClip();
 					cl.open(ais);
 					cl.start();
