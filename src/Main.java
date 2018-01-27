@@ -2,7 +2,7 @@ import java.util.Random;
 
 
 public class Main {
-	protected static final boolean IS_TEST = true;
+	protected static final boolean IS_TEST = false;
 	
 	public static String playerName="Matt";
 	public static boolean male=false;
